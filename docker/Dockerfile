@@ -41,17 +41,17 @@ WORKDIR $CATKIN_WS
 RUN catkin config --extend /opt/ros/$ROS_DISTRO
 RUN catkin build -j2 -DCMAKE_BUILD_TYPE=Release
 
-# Copy over configurations
-COPY ./configs /root/configs
-RUN rm -rf /root/.tmux
-RUN rm -rf /root/.vim
-RUN rm -rf /root/.vifm
-RUN ln -s /root/configs/tmux /root/.tmux
-RUN ln -s /root/configs/tmux/tmux.conf /root/.tmux
-RUN ln -s /root/configs/vifm /root/.vifm
-RUN ln -s /root/configs/vifm/vifmrc /root/.vifmrc
-RUN ln -s /root/configs/vim /root/.vim
-RUN ln -s /root/configs/vim/vimrc /root/.vimrc
+# # Copy over configurations
+# COPY ./configs /root/configs
+# RUN rm -rf /root/.tmux
+# RUN rm -rf /root/.vim
+# RUN rm -rf /root/.vifm
+# RUN ln -s /root/configs/tmux /root/.tmux
+# RUN ln -s /root/configs/tmux/tmux.conf /root/.tmux
+# RUN ln -s /root/configs/vifm /root/.vifm
+# RUN ln -s /root/configs/vifm/vifmrc /root/.vifmrc
+# RUN ln -s /root/configs/vim /root/.vim
+# RUN ln -s /root/configs/vim/vimrc /root/.vimrc
 
 # Setup entry
 WORKDIR $CATKIN_WS/src/VINS-Mono
