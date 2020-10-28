@@ -4,6 +4,8 @@ devel
 logs
 
 *.bag
+*.pdf
 *.pyc
 
+results
 results/euroc/*.txt
