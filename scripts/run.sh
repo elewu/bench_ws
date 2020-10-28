@@ -1,4 +1,4 @@
-# make
+make
 source devel/setup.bash
 # roslaunch bench benchmark_euroc-vins_mono.launch
 
@@ -7,7 +7,7 @@ source devel/setup.bash
 #   /vins_estimator/odometry \
 #   /leica/position
 
-rosrun rpg_trajectory_evaluation analyze_trajectory_single.py results
+rosrun rpg_trajectory_evaluation analyze_trajectory_single.py results/vins_mono/MH_01_easy
 
 # cd src/ORB_SLAM3
 # chmod +x build.sh
