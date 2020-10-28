@@ -35,7 +35,7 @@ submodules:
 
 build: .catkin_tools
 	@echo "[Building]"
-	@. /opt/ros/melodic/setup.sh && @catkin build -j2 -DCMAKE_BUILD_TYPE=Release
+	@. /opt/ros/melodic/setup.sh && catkin build -j2 -DCMAKE_BUILD_TYPE=Release
 	@bash ./scripts/build_orbslam3.bash
 
 clean:
