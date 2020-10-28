@@ -4,14 +4,14 @@ cd src/ORB_SLAM3
 
 echo "Configuring and building Thirdparty/DBoW2 ..."
 cd Thirdparty/DBoW2
-mkdir build
+mkdir -p build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j2
 
 echo "Configuring and building Thirdparty/g2o ..."
 cd ../../g2o
-mkdir build
+mkdir -p build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j2
@@ -23,7 +23,7 @@ tar -xf ORBvoc.txt.tar.gz
 cd ..
 
 echo "Configuring and building ORB_SLAM3 ..."
-mkdir build
+mkdir -p build
 cd build
 cmake .. -DCMAKE_BUILD_TYPE=Release
 make -j2

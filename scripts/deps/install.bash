@@ -24,5 +24,7 @@ install boost
 install ceres
 install eigen
 install opencv3
+install opengl
+install glew
 install yamlcpp
 install python_pkgs

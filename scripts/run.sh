@@ -1,12 +1,12 @@
 set -e
 
-make
+# make
 source devel/setup.bash
 # roslaunch bench benchmark_euroc-vins_mono.launch
-roslaunch bench benchmark_euroc-vins_fusion.launch
+# roslaunch bench benchmark_euroc-vins_fusion.launch
 
 # python scripts/rosutils/benchmark_vio.py \
-#   src/bench/benchmark_euroc-vins_mono.bag \
+#   src/bench/benchmark_euroc-vins_fusion.bag \
 #   /vins_estimator/odometry \
 
 # rosrun rpg_trajectory_evaluation \
