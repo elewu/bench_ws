@@ -2,7 +2,7 @@
   <!-- ARGS -->
   <arg name="rosbag_input_path" value="/data/euroc_mav/MH_01_easy.bag" />
   <arg name="rosbag_output_path" value="$(find bench)/benchmark_euroc-vins_mono.bag" />
-  <arg name="config_path" default="$(find feature_tracker)/../config/euroc/euroc_config.yaml" />
+  <arg name="config_path" default="$(find bench)/configs/vins_mono-euroc.yaml" />
   <arg name="vins_path" default="$(find feature_tracker)/../config/../" />
 
   <!-- RVIZ -->
@@ -15,7 +15,7 @@
 
   <!-- ROSBAG RECORD -->
   <node pkg="rosbag" type="record" name="recorder" output="screen" required="true"
-    args="--topic /vins_estimator/path -O $(arg rosbag_output_path)"/>
+    args="--topic /vins_estimator/odometry /leica/position -O $(arg rosbag_output_path)"/>
 
   <!-- FEATURE TRACKER -->
   <node name="feature_tracker" pkg="feature_tracker" type="feature_tracker" output="log" required="true">

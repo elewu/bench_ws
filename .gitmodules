@@ -1,3 +1,18 @@
 [submodule "src/VINS-Mono"]
 	path = src/VINS-Mono
 	url = https://github.com/HKUST-Aerial-Robotics/VINS-Mono
+[submodule "src/ORB_SLAM3"]
+	path = src/ORB_SLAM3
+	url = https://github.com/UZ-SLAMLab/ORB_SLAM3
+[submodule "src/Pangolin"]
+	path = src/Pangolin
+	url = https://github.com/stevenlovegrove/Pangolin
+[submodule "src/rpy_trajectory_evaluation"]
+	path = src/rpy_trajectory_evaluation
+	url = https://github.com/uzh-rpg/rpg_trajectory_evaluation
+[submodule "src/VINS-Fusion"]
+	path = src/VINS-Fusion
+	url = https://github.com/HKUST-Aerial-Robotics/VINS-Fusion
+[submodule "src/catkin_simple"]
+	path = src/catkin_simple
+	url = https://github.com/catkin/catkin_simple

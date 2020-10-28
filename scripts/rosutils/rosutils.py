@@ -1,17 +1,8 @@
-#!/usr/bin/env python
-import sys
 from math import atan2
 from math import asin
 from math import degrees
 
-import rosbag
 import rospy
-
-
-def print_usage():
-    print("Usage: bag2csv.py <ros bag> <ros topic> <output path>")
-    print("Example: bag2csv.py record.bag /robot/pose robot_images.csv")
-
 
 def quat2euler(q):
     qw = q[0]
@@ -59,6 +50,18 @@ class std_msgs:
         header = field_name
         return (header, data)
 
+# class nav_msgs:
+#     supported_msgs = [
+#         "nav_msgs/Path"
+#     ]
+
+    # @staticmethod
+    # def path_to_str(msg, prefix=""):
+    #     axis = ["x", "y", "z"]
+    #     header = ",".join([prefix + ax for ax in axis])
+    #     data = ",".join([str(msg.x), str(msg.y), str(msg.z)])
+    #     return (header, data)
+
 class geometry_msgs:
     supported_msgs = [
         "geometry_msgs/Point",
@@ -66,9 +69,9 @@ class geometry_msgs:
         "geometry_msgs/Quaternion",
         "geometry_msgs/Pose",
         "geometry_msgs/PoseStamped",
-        "geometry_msgs/PoseWithCovarianceStamped"
-        "geometry_msgs/Twist"
-        "geometry_msgs/TwistStamped"
+        "geometry_msgs/PoseWithCovarianceStamped",
+        "geometry_msgs/Twist",
+        "geometry_msgs/TwistStamped",
         "geometry_msgs/TwistWithCovarianceStamped"
     ]
 
@@ -257,39 +260,3 @@ def get_msg_converter(bag, topic):
     # SENSOR MSGS
     if msg_type == "sensor_msgs/Imu":
         return sensor_msgs.imu_to_str
-
-
-if __name__ == "__main__":
-    # Check CLI args
-    if len(sys.argv) != 4:
-        print_usage()
-        exit(-1)
-
-    # Parse CLI args
-    bag_path = sys.argv[1]
-    topic = sys.argv[2]
-    output_path = sys.argv[3]
-    bag = rosbag.Bag(bag_path, 'r')
-
-    # Checks
-    check_topic_exists(bag, topic)
-    check_topic_type(bag, topic)
-    msg_converter = get_msg_converter(bag, topic)
-
-    # Output csv file
-    print("Processing rosbag: [%s]" % (bag_path))
-    print("Extracting rostopic: [%s]" % (topic))
-    print("Saving to: [%s]" % (output_path))
-    # -- Output header
-    csv_file = open(output_path, "w")
-    topic, msg, t = next(bag.read_messages(topics=[topic]))
-    header, data = msg_converter(msg)
-    csv_file.write("#" + header + "\n")
-    csv_file.write(data + "\n")
-    # -- Output data
-    for topic, msg, t in bag.read_messages(topics=[topic]):
-        _, data = msg_converter(msg)
-        csv_file.write(data + "\n")
-        csv_file.flush()
-    csv_file.close()
-    print("Done!")
