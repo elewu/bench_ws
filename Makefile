@@ -33,9 +33,12 @@ submodules:
 	@git submodule init
 	@git submodule update
 
-build: .catkin_tools
+orbslam3:
+	@bash ./scripts/build_orbslam3.bash
+
+build: .catkin_tools orbslam3
 	@echo "[Building]"
-	@catkin build -j2 -DCMAKE_BUILD_TYPE=Release
+	@. /opt/ros/melodic/setup.sh && @catkin build -j2 -DCMAKE_BUILD_TYPE=Release
 
 clean:
 	@echo "[Cleaning]"
