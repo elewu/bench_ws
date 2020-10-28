@@ -1,8 +1,10 @@
 <launch>
   <!-- ARGS -->
+  <arg name="catkin_ws" value="$(dirname)/../../../" />
   <arg name="rosbag_input_path" value="/data/euroc_mav/MH_01_easy.bag" />
-  <arg name="rosbag_output_path" value="$(find bench)/benchmark_euroc-vins_mono.bag" />
-  <arg name="config_path" default="$(find bench)/configs/vins_mono-euroc.yaml" />
+  <arg name="rosbag_outfile" value="benchmark_euroc-vins_mono.bag" />
+  <arg name="rosbag_output_path" value="$(arg catkin_ws)/$(arg rosbag_outfile)" />
+  <arg name="config_path" default="$(find bench)/configs/vins_mono/euroc.yaml" />
   <arg name="vins_path" default="$(find feature_tracker)/../config/../" />
 
   <!-- RVIZ -->

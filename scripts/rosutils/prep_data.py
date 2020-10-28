@@ -30,6 +30,7 @@ def nav_msgs_odom_to_csv(msg, csv):
 
 
 def msg2csv(msg, csv):
+    msg_type = parse_msg_type(msg)
     if msg_type == "nav_msgs/Odometry":
         nav_msgs_odom_to_csv(msg, csv)
     # else:
@@ -53,7 +54,5 @@ if __name__ == "__main__":
     csv = open(output_path, "w")
     csv.write("# timestamp tx ty tz qx qy qz qw\n")
     for topic, msg, _ in bag.read_messages(topics=[topic]):
-        msg_type = parse_msg_type(msg)
-        if topic == est_topic:
-            msg2csv(msg, csv)
+        msg2csv(msg, csv)
     csv.close()
