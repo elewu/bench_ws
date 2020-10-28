@@ -27,7 +27,7 @@ Panels:
     SyncMode: 0
     SyncSource: Image
 Preferences:
-  PromptSaveOnExit: true
+  PromptSaveOnExit: false
 Toolbars:
   toolButtonStyle: 2
 Visualization Manager:
