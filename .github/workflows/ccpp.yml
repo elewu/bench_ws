@@ -1,0 +1,16 @@
+name: ci
+on: [push]
+jobs:
+  ci:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@master
+
+    - name: install dependencies
+      run: make deps
+
+    - name: pull submodules
+      run: make submodules
+
+    - name: build repos
+      run: make
