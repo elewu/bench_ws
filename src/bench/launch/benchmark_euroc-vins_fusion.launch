@@ -1,0 +1,19 @@
+<launch>
+  <!-- ARGS -->
+  <arg name="rosbag_input_path" value="/data/euroc_mav/MH_01_easy.bag" />
+  <arg name="rosbag_output_path" value="$(find bench)/benchmark_euroc-vins_mono.bag" />
+  <!-- <arg name="config_path" default="$(find bench)/configs/vins_fusion&#45;euroc&#45;mono_imu.yaml" /> -->
+  <arg name="config_path" default="$(find bench)/configs/vins_fusion-euroc-stereo_imu.yaml" />
+  <!-- <arg name="config_path" default="$(find bench)/configs/vins_fusion&#45;euroc&#45;stereo.yaml" /> -->
+
+  <!-- ROSBAG PLAY -->
+  <node pkg="rosbag" type="play" name="player" output="screen" required="true"
+    args="--clock -q --rate=1.0 $(arg rosbag_input_path)"/>
+
+  <!-- RVIZ -->
+  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" required="true"
+    args="-d $(find bench)/rviz/vins_fusion.rviz" />
+
+  <!-- VINS FUSION -->
+  <node name="vins_fusion" pkg="vins" type="vins_node" output="screen" required="true" args="$(arg config_path)" />
+</launch>

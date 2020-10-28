@@ -7,7 +7,7 @@ import rospy
 from nav_msgs.msg import Odometry
 
 def print_usage():
-    print("Usage: benchmark_vio.py <ros bag> <estimate topic> <ground truth topic>")
+    print("Usage: prep_data.py <ros bag> <topic> <output_path>")
 
 
 def check_topic_exists(bag, topic):
@@ -44,26 +44,16 @@ if __name__ == "__main__":
 
     # Parse CLI args
     bag_path = sys.argv[1]
-    est_topic = sys.argv[2]
-    gnd_topic = sys.argv[3]
+    topic = sys.argv[2]
+    output_path = sys.argv[3]
     bag = rosbag.Bag(bag_path, 'r')
-
-    # Checks
-    check_topic_exists(bag, est_topic)
-    check_topic_exists(bag, gnd_topic)
+    check_topic_exists(bag, topic)
 
     # Convert messages to stamped data
-    est_csv = open("stamped_traj_estimate.txt", "w")
-    gnd_csv = open("stamped_groundtruth.txt", "w")
-    est_csv.write("# timestamp tx ty tz qx qy qz qw\n")
-    gnd_csv.write("# timestamp tx ty tz qx qy qz qw\n")
-
-    for topic, msg, _ in bag.read_messages(topics=[est_topic, gnd_topic]):
+    csv = open(output_path, "w")
+    csv.write("# timestamp tx ty tz qx qy qz qw\n")
+    for topic, msg, _ in bag.read_messages(topics=[topic]):
         msg_type = parse_msg_type(msg)
         if topic == est_topic:
-            msg2csv(msg, est_csv)
-        elif topic == gnd_topic:
-            msg2csv(msg, gnd_csv)
-
-    est_csv.close()
-    gnd_csv.close()
+            msg2csv(msg, csv)
+    csv.close()

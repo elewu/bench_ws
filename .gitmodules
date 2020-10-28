@@ -16,3 +16,6 @@
 [submodule "src/catkin_simple"]
 	path = src/catkin_simple
 	url = https://github.com/catkin/catkin_simple
+[submodule "src/msckf_vio"]
+	path = src/msckf_vio
+	url = https://github.com/KumarRobotics/msckf_vio
