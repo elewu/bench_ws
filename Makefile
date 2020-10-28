@@ -1,11 +1,42 @@
-default: repos build
-.PHONY: repos build
+default: build
+.PHONY: build
+
+define usage
+[TARGETS]:
+  deps:
+    Install dependencies.
+
+  submodules:
+    Instanciate git submodules.
+
+  build:
+    Build this workspace.
+
+  clean:
+    Clean this workspace.
+endef
+export usage
+
+help:
+	@echo "$$usage"
 
 .catkin_tools:
+	@echo "[Instanciating catkin workspace]"
 	@catkin init
 
-repos:
+deps:
+	@echo "[Installing Dependencies]"
+	@sudo bash ./scripts/deps/install.bash
+
+submodules:
+	@echo "[Instanciating git submodules]"
 	@git submodule init
+	@git submodule update
 
 build: .catkin_tools
+	@echo "[Building]"
 	@catkin build -j2 -DCMAKE_BUILD_TYPE=Release
+
+clean:
+	@echo "[Cleaning]"
+	@catkin clean
