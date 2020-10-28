@@ -1,0 +1,68 @@
+set datafile separator ","
+
+set style line 1 \
+  linecolor rgb "red" \
+  linetype 1 linewidth 1
+
+set style line 2 \
+  linecolor rgb "green" \
+  linetype 1 linewidth 1
+
+set style line 3 \
+  linecolor rgb "blue" \
+  linetype 1 linewidth 1
+
+set style line 4 \
+  linecolor rgb "black" \
+  linetype 1 linewidth 1
+
+
+# Plot pose data
+set terminal qt 0 enhanced font 'Verdana,7'
+# set multiplot layout 2,1
+# set title ""
+# set font ",8"
+
+# set title "Displacement"
+# # set xlabel "Time [s]"
+# set ylabel "Displacement [m]"
+# plot "/tmp/nav_odometry.csv" using 1:6 with lines linestyle 1 title "x", \
+#      "/tmp/nav_odometry.csv" using 1:7 with lines linestyle 2 title "y", \
+#      "/tmp/nav_odometry.csv" using 1:8 with lines linestyle 3 title "z"
+
+set title "Orientation"
+set xlabel "Time [s]"
+set ylabel "Attitude [deg]"
+# -- Plot Quaternions
+# plot "/tmp/nav_odometry.csv" using 1:9 with lines linestyle 4 title "w", \
+#      "/tmp/nav_odometry.csv" using 1:10 with lines linestyle 1 title "x", \
+#      "/tmp/nav_odometry.csv" using 1:11 with lines linestyle 2 title "y", \
+#      "/tmp/nav_odometry.csv" using 1:12 with lines linestyle 3 title "z"
+#-- Plot Euler angles (roll, pitch, yaw)
+plot "/tmp/nav_odometry.csv" using 1:13 with lines linestyle 1 title "x", \
+     "/tmp/nav_odometry.csv" using 1:14 with lines linestyle 2 title "y", \
+     "/tmp/nav_odometry.csv" using 1:15 with lines linestyle 3 title "z",
+# unset multiplot
+
+# # Plot twist data
+# set terminal qt 1 enhanced font 'Verdana,7'
+# set multiplot layout 2, 1
+# set title ""
+# set font ",10"
+# set bmargin 8
+#
+# set title "Linear Velocity"
+# set xlabel "Time [s]"
+# set ylabel "Attitude [deg]"
+# plot "/tmp/nav_odometry.csv" using 1:52 with lines linestyle 1 notitle, \
+#      "/tmp/nav_odometry.csv" using 1:53 with lines linestyle 2 notitle, \
+#      "/tmp/nav_odometry.csv" using 1:54 with lines linestyle 3 notitle
+#
+# set title "Angular Velocity"
+# set xlabel "Time [s]"
+# set ylabel "Attitude [deg]"
+# plot "/tmp/nav_odometry.csv" using 1:55 with lines linestyle 1 notitle, \
+#      "/tmp/nav_odometry.csv" using 1:56 with lines linestyle 2 notitle, \
+#      "/tmp/nav_odometry.csv" using 1:57 with lines linestyle 3 notitle
+# unset multiplot
+
