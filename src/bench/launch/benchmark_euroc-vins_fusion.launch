@@ -10,6 +10,10 @@
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"
     args="--clock -q --rate=1.0 $(arg rosbag_input_path)"/>
 
+  <!-- ROSBAG RECORD -->
+  <node pkg="rosbag" type="record" name="recorder" output="screen" required="true"
+    args="--topic /vins_fusion/odometry /leica/position -O $(arg rosbag_output_path)"/>
+
   <!-- RVIZ -->
   <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" required="true"
     args="-d $(find bench)/rviz/vins_fusion.rviz" />

@@ -5,3 +5,5 @@ logs
 
 *.bag
 *.pyc
+
+results/euroc/*.txt
