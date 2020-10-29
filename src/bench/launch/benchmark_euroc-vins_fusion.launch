@@ -1,10 +1,10 @@
 <launch>
   <!-- ARGS -->
-  <arg name="catkin_ws" value="$(dirname)/../../../" />
-  <arg name="rosbag_input_path" value="/data/euroc_mav/MH_01_easy.bag" />
-  <arg name="rosbag_outfile" value="benchmark_euroc-vins_fusion.bag" />
-  <arg name="rosbag_output_path" value="$(arg catkin_ws)/$(arg rosbag_outfile)" />
-  <arg name="config_path" default="$(find bench)/configs/autocal/vins_fusion/euroc-stereo_imu.yaml" />
+  <arg name="catkin_ws" default="$(dirname)/../../../" />
+  <arg name="rosbag_input_path" default="/data/euroc_mav/MH_01_easy.bag" />
+  <arg name="rosbag_outfile" default="estimation.bag" />
+  <arg name="rosbag_output_path" default="$(arg catkin_ws)/$(arg rosbag_outfile)" />
+  <arg name="config_file" default="$(find bench)/configs/autocal/vins_fusion/euroc-stereo_imu.yaml" />
 
   <!-- ROSBAG PLAY -->
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"
@@ -14,10 +14,10 @@
   <node pkg="rosbag" type="record" name="recorder" output="screen" required="true"
     args="--topic /vins_fusion/odometry /leica/position -O $(arg rosbag_output_path)"/>
 
-  <!-- RVIZ -->
-  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" required="true"
-    args="-d $(find bench)/rviz/vins_fusion.rviz" />
+  <!-- <!&#45;&#45; RVIZ &#45;&#45;> -->
+  <!-- <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" required="true" -->
+  <!--   args="&#45;d $(find bench)/rviz/vins_fusion.rviz" /> -->
 
   <!-- VINS FUSION -->
-  <node name="vins_fusion" pkg="vins" type="vins_node" output="screen" required="true" args="$(arg config_path)" />
+  <node name="vins_fusion" pkg="vins" type="vins_node" output="screen" required="true" args="$(arg config_file)" />
 </launch>

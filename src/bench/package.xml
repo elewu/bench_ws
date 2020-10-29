@@ -5,4 +5,14 @@
   <description>Benchmark</description>
   <maintainer email="chutsu@gmail.com">Chris Choi</maintainer>
   <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>pangolin</build_depend>
+  <build_depend>orbslam3</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>pangolin</run_depend>
+  <run_depend>orbslam3</run_depend>
 </package>

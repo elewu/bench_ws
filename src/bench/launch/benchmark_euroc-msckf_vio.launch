@@ -1,10 +1,10 @@
 <launch>
   <!-- ARGS -->
-  <arg name="catkin_ws" value="$(dirname)/../../../" />
-  <arg name="rosbag_input_path" value="/data/euroc_mav/V1_01_easy.bag" />
-  <arg name="rosbag_outfile" value="benchmark_euroc-vins_fusion.bag" />
-  <arg name="rosbag_output_path" value="$(arg catkin_ws)/$(arg rosbag_outfile)" />
-  <arg name="calib_file" value="$(find bench)/configs/autocal/msckf_vio/euroc.yaml"/>
+  <arg name="catkin_ws" default="$(dirname)/../../../" />
+  <arg name="rosbag_input_path" default="/data/euroc_mav/V1_01_easy.bag" />
+  <arg name="rosbag_outfile" default="estimation.bag" />
+  <arg name="rosbag_output_path" default="$(arg catkin_ws)/$(arg rosbag_outfile)" />
+  <arg name="config_file" default="$(find bench)/configs/autocal/msckf_vio/euroc.yaml"/>
 
   <!-- ROSBAG PLAY -->
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"
@@ -16,7 +16,7 @@
 
   <!-- MSCKF VIO LAUNCH FILE -->
   <include file="$(find msckf_vio)/launch/msckf_vio_euroc.launch">
-    <arg name="calibration_file" value="$(arg calib_file)" />
+    <arg name="calibration_file" value="$(arg config_file)" />
   </include>
 
   <!-- RVIZ -->

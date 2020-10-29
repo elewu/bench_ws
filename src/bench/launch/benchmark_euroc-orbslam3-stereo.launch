@@ -1,0 +1,22 @@
+<launch>
+  <!-- ARGS -->
+  <arg name="catkin_ws" default="$(dirname)/../../../" />
+  <arg name="rosbag_start_delay" default="10" />
+  <arg name="rosbag_input_path" default="/data/euroc_mav/rosbags/V1_01.bag" />
+  <arg name="rosbag_outfile" default="estimation.bag" />
+  <arg name="rosbag_output_path" default="$(arg catkin_ws)/$(arg rosbag_outfile)" />
+  <arg name="config_file" default="$(find orbslam3)/Examples/Stereo/EuRoC.yaml" />
+
+  <!-- ROSBAG PLAY -->
+  <node pkg="rosbag" type="play" name="player" output="screen" required="true"
+      launch-prefix="bash -c 'sleep $(arg rosbag_start_delay); $0 $@' "
+      args="--clock -q --rate=0.8 $(arg rosbag_input_path)">
+    <remap from="/cam0/image_raw" to="/camera/left/image_raw"/>
+    <remap from="/cam1/image_raw" to="/camera/right/image_raw"/>
+    <remap from="/imu0"           to="/imu"/>
+  </node>
+
+  <!-- ORBSLAM3 -->
+  <node name="orbslam3" pkg="bench" type="orbslam3_stereo" output="screen" required="true"
+    args="$(find orbslam3)/Vocabulary/ORBvoc.txt $(arg config_file) true" />
+</launch>

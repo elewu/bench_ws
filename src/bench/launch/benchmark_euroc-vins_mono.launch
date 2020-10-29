@@ -1,15 +1,15 @@
 <launch>
   <!-- ARGS -->
-  <arg name="catkin_ws" value="$(dirname)/../../../" />
-  <arg name="rosbag_input_path" value="/data/euroc_mav/MH_01_easy.bag" />
-  <arg name="rosbag_outfile" value="benchmark_euroc-vins_mono.bag" />
-  <arg name="rosbag_output_path" value="$(arg catkin_ws)/$(arg rosbag_outfile)" />
-  <arg name="config_path" default="$(find bench)/configs/vins_mono/euroc.yaml" />
+  <arg name="catkin_ws" default="$(dirname)/../../../" />
+  <arg name="rosbag_input_path" default="/data/euroc_mav/MH_01_easy.bag" />
+  <arg name="rosbag_outfile" default="estimation.bag" />
+  <arg name="rosbag_output_path" default="$(arg catkin_ws)/$(arg rosbag_outfile)" />
+  <arg name="config_file" default="$(find bench)/configs/vins_mono/euroc.yaml" />
   <arg name="vins_path" default="$(find feature_tracker)/../config/../" />
 
-  <!-- RVIZ -->
-  <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" required="true"
-    args="-d $(find bench)/rviz/vins_mono.rviz" />
+  <!-- <!&#45;&#45; RVIZ &#45;&#45;> -->
+  <!-- <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" required="true" -->
+  <!--   args="&#45;d $(find bench)/rviz/vins_mono.rviz" /> -->
 
   <!-- ROSBAG PLAY -->
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"
@@ -21,19 +21,19 @@
 
   <!-- FEATURE TRACKER -->
   <node name="feature_tracker" pkg="feature_tracker" type="feature_tracker" output="log" required="true">
-    <param name="config_file" type="string" value="$(arg config_path)" />
+    <param name="config_file" type="string" value="$(arg config_file)" />
     <param name="vins_folder" type="string" value="$(arg vins_path)" />
   </node>
 
   <!-- ESTIMATOR -->
   <node name="vins_estimator" pkg="vins_estimator" type="vins_estimator" output="screen" required="true">
-    <param name="config_file" type="string" value="$(arg config_path)" />
+    <param name="config_file" type="string" value="$(arg config_file)" />
     <param name="vins_folder" type="string" value="$(arg vins_path)" />
   </node>
 
   <!-- POSE GRAPH OPTIMIZER -->
   <node name="pose_graph" pkg="pose_graph" type="pose_graph" output="screen" required="true">
-    <param name="config_file" type="string" value="$(arg config_path)" />
+    <param name="config_file" type="string" value="$(arg config_file)" />
     <param name="visualization_shift_x" type="int" value="0" />
     <param name="visualization_shift_y" type="int" value="0" />
     <param name="skip_cnt" type="int" value="0" />

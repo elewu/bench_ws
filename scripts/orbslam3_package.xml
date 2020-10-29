@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package>
+  <name>orbslam3</name>
+  <version>0.0.0</version>
+  <description>ORBSLAM3</description>
+  <maintainer email="dummy@gmail.com">John Doe</maintainer>
+  <license>GPL</license>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>pangolin</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>pangolin</run_depend>
+</package>
