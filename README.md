@@ -28,18 +28,55 @@ issue the following commands,
 which installs dependencies, pull the git submoduels and builds this workspace.
 
 
-Run
----
+Run on EuRoC dataset
+--------------------
 
-To run VIO on [EuRoC][EuRoC] dataset, have a look in these roslaunch files:
+First obtain the [EuRoC][EuRoC] dataset. The launch files provided by this
+project by default assumes you have a directory called `/data/euroc_mav/rosbags`
+and that it looks something like this:
 
-    src/bench/launch/benchmark_euroc-vins_fusion.launch
-    src/bench/launch/benchmark_euroc-vins_mono.launch
+    MH_01.bag
+    MH_02.bag
+    MH_03.bag
+    MH_04.bag
+    MH_05.bag
+    V1_01.bag
+    V1_02.bag
+    V1_03.bag
+    V2_01.bag
+    V2_02.bag
+    V2_03.bag
 
-Or to run them simply do:
+Note how the `easy`, `medium` and `difficult` tags are removed.
 
-    roslaunch bench benchmark_euroc-vins_fusion.launch
-    roslaunch bench benchmark_euroc-vins_mono.launch
+To run VIO on a EuRoC dataset use one of the following roslaunch files in the
+`bench` package.
+
+    benchmark_euroc-msckf_vio.launch
+    benchmark_euroc-orbslam3-mono.launch
+    benchmark_euroc-orbslam3-stereo.launch
+    benchmark_euroc-orbslam3-stereo_imu.launch
+    benchmark_euroc-vins_fusion.launch
+    benchmark_euroc-vins_mono.launch
+
+Most of these launch files have the following argments:
+
+    rosbag_input_path: Path to ROS bag to run against
+      default="/data/euroc_mav/V1_01_easy.bag"
+
+    rosbag_outfile: Filename to save the estimation in a ROS bag
+      default="estimation.bag"
+
+    rosbag_output_path: Path to where the estimation is saved to
+      default: $(arg catkin_ws)/$(arg rosbag_outfile)
+
+    config_file:: Config file for the specific algorithm
+
+see individual launch files for more options. These roslaunch file arguments
+can be over-ridden in the commandline while performing a `roslaunch` via:
+
+    roslanch bench benchmark_euroc-msckf_vio.launch \
+      config_file:=<some new config file>
 
 
 LICENCE

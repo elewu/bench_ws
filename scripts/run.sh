@@ -100,7 +100,7 @@ make
 source devel/setup.bash
 # ROSBAGS_DIR=/data/euroc_mav/rosbags
 
-roslaunch bench benchmark_euroc-orbslam3-stereo.launch
+roslaunch bench benchmark_euroc-orbslam3-stereo_imu.launch
 
 # # VINS-Fusion
 # RESULTS_DIR=$PWD/results/euroc/vins_fusion
