@@ -268,7 +268,7 @@ int main(int argc, char **argv) {
   // Save estimation
   if (save_estimation) {
     SLAM.SaveTrajectoryEuRoC(save_path);
-    // SLAM.SaveKeyFrameTrajectoryEuRoC("KeyFrameTrajectory.txt");
+    // SLAM.SaveKeyFrameTrajectoryEuRoC(save_path);
   }
 
   return 0;

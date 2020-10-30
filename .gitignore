@@ -2,6 +2,7 @@
 build
 devel
 logs
+tags
 
 *.bag
 *.pdf

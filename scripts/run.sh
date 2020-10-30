@@ -36,6 +36,16 @@ run_vio() {
     rosbag_output_path:=$ROSBAG_OUTPUT
 }
 
+run_orbslam3() {
+  LAUNCH_FILE=$1;
+  ROSBAG_INPUT=$2;
+  SAVE_OUTPUT=$3;
+
+  roslaunch bench $LAUNCH_FILE \
+    rosbag_input_path:=$ROSBAG_INPUT \
+    save_path:=$SAVE_OUTPUT
+}
+
 analyze_results() {
   RESULTS_PATH=$1;
   EST_TOPIC=$2;
@@ -63,6 +73,25 @@ analyze_results() {
     $RESULTS_PATH/report.pdf
 }
 
+analyze_orbslam3_results() {
+  RESULTS_PATH=$1;
+
+  rosrun rpg_trajectory_evaluation \
+    analyze_trajectory_single.py \
+    $RESULTS_PATH
+
+  pdfunite \
+    $RESULTS_PATH/plots/traj_est/rel_translation_error.pdf \
+    $RESULTS_PATH/plots/traj_est/rel_translation_error_perc.pdf \
+    $RESULTS_PATH/plots/traj_est/rel_yaw_error.pdf \
+    $RESULTS_PATH/plots/traj_est/rotation_error_posyaw_-1.pdf \
+    $RESULTS_PATH/plots/traj_est/scale_error_posyaw_-1.pdf \
+    $RESULTS_PATH/plots/traj_est/trajectory_side_posyaw_-1.pdf \
+    $RESULTS_PATH/plots/traj_est/trajectory_top_posyaw_-1.pdf \
+    $RESULTS_PATH/plots/traj_est/translation_error_posyaw_-1.pdf \
+    $RESULTS_PATH/report.pdf
+}
+
 batch_run_vio() {
   LAUNCH_FILE=$1;
   ROSBAGS_DIR=$2;
@@ -72,6 +101,18 @@ batch_run_vio() {
     ROSBAG_INPUT="$ROSBAGS_DIR/$ROSBAG";
     ROSBAG_OUTPUT="$RESULTS_DIR/${ROSBAG/.bag/}/estimation.bag";
     run_vio $LAUNCH_FILE $ROSBAG_INPUT $ROSBAG_OUTPUT
+  done
+}
+
+batch_run_orbslam3() {
+  LAUNCH_FILE=$1;
+  ROSBAGS_DIR=$2;
+  RESULTS_DIR=$3;
+
+  for ROSBAG in $(ls $ROSBAGS_DIR); do
+    ROSBAG_INPUT="$ROSBAGS_DIR/$ROSBAG";
+    SAVE_PATH="$RESULTS_DIR/${ROSBAG/.bag/}/stamped_traj_estimate.txt";
+    run_orbslam3 $LAUNCH_FILE $ROSBAG_INPUT $SAVE_PATH
   done
 }
 
@@ -96,11 +137,13 @@ compare_runs() {
   rm -f tmp-*-*.pdf
 }
 
-make
+# python scripts/compute_stereo_rectify.py > rectify.txt
+
+# make
 source devel/setup.bash
 # ROSBAGS_DIR=/data/euroc_mav/rosbags
 
-roslaunch bench benchmark_euroc-orbslam3-stereo_imu.launch
+# roslaunch bench benchmark_euroc-orbslam3-stereo_imu.launch
 
 # # VINS-Fusion
 # RESULTS_DIR=$PWD/results/euroc/vins_fusion
@@ -117,10 +160,25 @@ roslaunch bench benchmark_euroc-orbslam3-stereo_imu.launch
 # LAUNCH_FILE=benchmark_euroc-msckf_vio.launch
 # EST_TOPIC=/firefly_sbx/vio/odom
 
-# # ORBSLAM3
+# ORBSLAM3
 # RESULTS_DIR=$PWD/results/euroc/orbslam3
-# LAUNCH_FILE=benchmark_euroc-orbslam3.launch
-# EST_TOPIC=/firefly_sbx/vio/odom
+LAUNCH_FILE=benchmark_euroc-orbslam3-stereo_imu.launch
+# prep_result_folders $RESULTS_DIR
+
+run_orbslam3 \
+  $LAUNCH_FILE \
+  /data/euroc_mav/rosbags/MH_01.bag \
+  $PWD/results/euroc/orbslam3/MH_01/estimate2.txt
+python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
+  /data/euroc_mav/MH_01_easy/mav0/state_groundtruth_estimate0/data.csv \
+  ./results/euroc/orbslam3/MH_01/estimate2.txt \
+  --plot orbslam3_MH_01.pdf \
+  --save ./results/euroc/orbslam3/MH_01/estimate_aligned2.txt \
+  --verbose
+
+# analyze_orbslam3_results $PWD/results/euroc/orbslam3/MH_01
+# batch_run_orbslam3 $LAUNCH_FILE $ROSBAGS_DIR $RESULTS_DIR
+
 
 # # Run algorithms on EuRoC dataset
 # prep_result_folders $RESULTS_DIR

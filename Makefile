@@ -35,7 +35,7 @@ submodules:
 
 build: .catkin_tools
 	@echo "[Building]"
-	@ls -fs scripts/orbslam3_package.xml src/ORB_SLAM3/package.xml
+	@ln -fs ${PWD}/scripts/orbslam3_package.xml src/ORB_SLAM3/package.xml
 	@. /opt/ros/melodic/setup.sh && catkin build -j2 -DCMAKE_BUILD_TYPE=Release
 
 clean:
