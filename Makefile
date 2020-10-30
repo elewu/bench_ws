@@ -35,8 +35,11 @@ submodules:
 
 build: .catkin_tools
 	@echo "[Building]"
-	@ln -fs ${PWD}/scripts/orbslam3_package.xml src/ORB_SLAM3/package.xml
 	@. /opt/ros/melodic/setup.sh && catkin build -j2 -DCMAKE_BUILD_TYPE=Release
+	# Build ORB_SLAM3
+	@bash ./scripts/build_orbslam3.bash
+	@mkdir -p ${PWD}/src/bench/vocab/
+	@ln -fs ${PWD}/src/ORB_SLAM3/Vocabulary/* ${PWD}/src/bench/vocab/
 
 clean:
 	@echo "[Cleaning]"

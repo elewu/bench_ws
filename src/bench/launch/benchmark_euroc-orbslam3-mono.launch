@@ -5,7 +5,7 @@
   <arg name="rosbag_input_path" default="/data/euroc_mav/rosbags/V1_01.bag" />
   <arg name="rosbag_outfile" default="estimation.bag" />
   <arg name="rosbag_output_path" default="$(arg catkin_ws)/$(arg rosbag_outfile)" />
-  <arg name="config_file" default="$(find orbslam3)/Examples/Monocular/EuRoC.yaml" />
+  <arg name="config_file" default="$(find bench)/configs/orbslam3/euroc-mono.yaml" />
 
   <!-- ROSBAG PLAY -->
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"
@@ -16,5 +16,5 @@
 
   <!-- ORBSLAM3 -->
   <node name="orbslam3" pkg="bench" type="orbslam3_mono" output="screen" required="true"
-    args="$(find orbslam3)/Vocabulary/ORBvoc.txt $(arg config_file)" />
+    args="$(find bench)/vocab/ORBvoc.txt $(arg config_file)" />
 </launch>

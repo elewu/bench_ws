@@ -139,7 +139,7 @@ compare_runs() {
 
 # python scripts/compute_stereo_rectify.py > rectify.txt
 
-# make
+make
 source devel/setup.bash
 # ROSBAGS_DIR=/data/euroc_mav/rosbags
 
@@ -165,16 +165,16 @@ source devel/setup.bash
 LAUNCH_FILE=benchmark_euroc-orbslam3-stereo_imu.launch
 # prep_result_folders $RESULTS_DIR
 
-run_orbslam3 \
-  $LAUNCH_FILE \
-  /data/euroc_mav/rosbags/MH_01.bag \
-  $PWD/results/euroc/orbslam3/MH_01/estimate2.txt
-python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
-  /data/euroc_mav/MH_01_easy/mav0/state_groundtruth_estimate0/data.csv \
-  ./results/euroc/orbslam3/MH_01/estimate2.txt \
-  --plot orbslam3_MH_01.pdf \
-  --save ./results/euroc/orbslam3/MH_01/estimate_aligned2.txt \
-  --verbose
+# run_orbslam3 \
+#   $LAUNCH_FILE \
+#   /data/euroc_mav/rosbags/MH_01.bag \
+#   $PWD/results/euroc/orbslam3/MH_01/estimate2.txt
+# python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
+#   /data/euroc_mav/MH_01_easy/mav0/state_groundtruth_estimate0/data.csv \
+#   ./results/euroc/orbslam3/MH_01/estimate2.txt \
+#   --plot orbslam3_MH_01.pdf \
+#   --save ./results/euroc/orbslam3/MH_01/estimate_aligned2.txt \
+#   --verbose
 
 # analyze_orbslam3_results $PWD/results/euroc/orbslam3/MH_01
 # batch_run_orbslam3 $LAUNCH_FILE $ROSBAGS_DIR $RESULTS_DIR
