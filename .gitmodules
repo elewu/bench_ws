@@ -1,9 +1,6 @@
 [submodule "src/VINS-Mono"]
 	path = src/VINS-Mono
 	url = https://github.com/HKUST-Aerial-Robotics/VINS-Mono
-[submodule "src/ORB_SLAM3"]
-	path = src/ORB_SLAM3
-	url = https://github.com/UZ-SLAMLab/ORB_SLAM3
 [submodule "src/Pangolin"]
 	path = src/Pangolin
 	url = https://github.com/stevenlovegrove/Pangolin

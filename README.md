@@ -33,7 +33,7 @@ Run on EuRoC dataset
 
 First obtain the [EuRoC][EuRoC] dataset. The launch files provided by this
 project by default assumes you have a directory called `/data/euroc_mav/rosbags`
-and that it looks something like this:
+and that it contains the rosbags as follows:
 
     MH_01.bag
     MH_02.bag
@@ -47,10 +47,10 @@ and that it looks something like this:
     V2_02.bag
     V2_03.bag
 
-Note how the `easy`, `medium` and `difficult` tags are removed.
+Note how the `easy`, `medium` and `difficult` suffix tags are removed.
 
-To run VIO on a EuRoC dataset use one of the following roslaunch files in the
-`bench` package.
+To run any of the supported state-estimation algorithm on a EuRoC dataset use
+one of the following roslaunch files in the `bench` package.
 
     benchmark_euroc-msckf_vio.launch
     benchmark_euroc-orbslam3-mono.launch
@@ -59,24 +59,21 @@ To run VIO on a EuRoC dataset use one of the following roslaunch files in the
     benchmark_euroc-vins_fusion.launch
     benchmark_euroc-vins_mono.launch
 
-Most of these launch files have the following argments:
+Most of these launch files have the following launch argments:
 
-    rosbag_input_path: Path to ROS bag to run against
-      default="/data/euroc_mav/V1_01_easy.bag"
-
+    rosbag_input_path: Path to ROS bag to run the algorithm against
     rosbag_outfile: Filename to save the estimation in a ROS bag
-      default="estimation.bag"
+    rosbag_output_path: Full path to where the estimation is saved to
+    config_file:: Config / calibration file for the specific algorithm
 
-    rosbag_output_path: Path to where the estimation is saved to
-      default: $(arg catkin_ws)/$(arg rosbag_outfile)
-
-    config_file:: Config file for the specific algorithm
-
-see individual launch files for more options. These roslaunch file arguments
-can be over-ridden in the commandline while performing a `roslaunch` via:
+see individual launch files for default and more options. These roslaunch file
+arguments can be over-ridden in the commandline while performing a `roslaunch`
+so that you don't have to directly change the launch file yourself, for
+example:
 
     roslanch bench benchmark_euroc-msckf_vio.launch \
-      config_file:=<some new config file>
+      config_file:=<some new config file> \
+      rosbag_input_path:=<some new ros bag>
 
 
 LICENCE
