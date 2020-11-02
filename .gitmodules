@@ -21,4 +21,4 @@
 	url = https://github.com/chutsu/ORB_SLAM3
 [submodule "src/okvis"]
 	path = src/okvis
-	url = https://github.com:chutsu/okvis
+	url = https://github.com/chutsu/okvis
