@@ -16,3 +16,6 @@
 [submodule "src/msckf_vio"]
 	path = src/msckf_vio
 	url = https://github.com/KumarRobotics/msckf_vio
+[submodule "src/ORB_SLAM3"]
+	path = src/ORB_SLAM3
+	url = https://github.com/chutsu/ORB_SLAM3

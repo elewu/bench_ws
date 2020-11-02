@@ -3,10 +3,10 @@
   <arg name="catkin_ws" default="$(dirname)/../../../" />
   <arg name="rosbag_start_delay" default="10" />
   <arg name="rosbag_input_path" default="/data/euroc_mav/rosbags/V1_01.bag" />
-  <arg name="save_path" default="$(arg catkin_ws)/stamped_traj_estimate.txt" />
+  <arg name="save_path" default="$(arg catkin_ws)/estimate-kalibr.txt" />
   <arg name="config_file" default="$(find bench)/configs/orbslam3/euroc-stereo_imu.yaml" />
   <arg name="vocab_file" default="$(find bench)/vocab/ORBvoc.txt" />
-  <arg name="show_gui" default="false" />
+  <arg name="show_gui" default="true" />
 
   <!-- ROSBAG PLAY -->
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"

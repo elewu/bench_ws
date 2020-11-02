@@ -10,9 +10,9 @@
 
   <build_depend>roscpp</build_depend>
   <build_depend>pangolin</build_depend>
-  <build_depend>orbslam3</build_depend>
+  <build_depend>ORB_SLAM3</build_depend>
 
   <run_depend>roscpp</run_depend>
   <run_depend>pangolin</run_depend>
-  <run_depend>orbslam3</run_depend>
+  <run_depend>ORB_SLAM3</run_depend>
 </package>

@@ -10,7 +10,11 @@ FIND_PACKAGE(catkin REQUIRED COMPONENTS
              geometry_msgs
              nav_msgs
              tf
-             cv_bridge)
+             cv_bridge
+             ORB_SLAM3)
+
+CATKIN_PACKAGE()
+SET(DEPS ${catkin_LIBRARIES} ${OpenCV_LIBS} ${Pangolin_LIBRARIES})
 
 INCLUDE_DIRECTORIES(${catkin_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
@@ -18,13 +22,6 @@ INCLUDE_DIRECTORIES("../ORB_SLAM3/")
 INCLUDE_DIRECTORIES("../ORB_SLAM3/include")
 INCLUDE_DIRECTORIES("../ORB_SLAM3/include/CameraModels")
 LINK_DIRECTORIES("../ORB_SLAM3/lib")
-
-CATKIN_PACKAGE(CATKIN_DEPENDS pangolin)
-
-SET(DEPS ${catkin_LIBRARIES}
-         ${OpenCV_LIBS}
-         ${Pangolin_LIBRARIES}
-         ORB_SLAM3)
 
 ADD_EXECUTABLE(orbslam3_mono src/orbslam3/ros_mono.cc)
 TARGET_LINK_LIBRARIES(orbslam3_mono ${DEPS})
@@ -41,7 +38,7 @@ TARGET_LINK_LIBRARIES(orbslam3_stereo ${DEPS})
 ADD_EXECUTABLE(orbslam3_stereo_inertial src/orbslam3/ros_stereo_inertial.cc)
 TARGET_LINK_LIBRARIES(orbslam3_stereo_inertial ${DEPS})
 
-install(TARGETS
+INSTALL(TARGETS
   orbslam3_mono
   orbslam3_mono_inertial
   orbslam3_rgbd

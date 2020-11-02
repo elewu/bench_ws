@@ -139,11 +139,26 @@ compare_runs() {
 
 # python scripts/compute_stereo_rectify.py > rectify.txt
 
-make
+# make
 source devel/setup.bash
 # ROSBAGS_DIR=/data/euroc_mav/rosbags
 
 # roslaunch bench benchmark_euroc-orbslam3-stereo_imu.launch
+# python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
+#   /data/euroc_mav/V1_01_easy/mav0/state_groundtruth_estimate0/data.csv \
+#   ./estimate-euroc.txt \
+#   --plot orbslam3_V1_01-euroc.pdf \
+#   --verbose
+# python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
+#   /data/euroc_mav/V1_01_easy/mav0/state_groundtruth_estimate0/data.csv \
+#   ./estimate-autocal.txt \
+#   --plot orbslam3_V1_01-autocal.pdf \
+#   --verbose
+# python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
+#   /data/euroc_mav/V1_01_easy/mav0/state_groundtruth_estimate0/data.csv \
+#   ./estimate-kalibr.txt \
+#   --plot orbslam3_V1_01-kalibr.pdf \
+#   --verbose
 
 # # VINS-Fusion
 # RESULTS_DIR=$PWD/results/euroc/vins_fusion
@@ -162,7 +177,7 @@ source devel/setup.bash
 
 # ORBSLAM3
 # RESULTS_DIR=$PWD/results/euroc/orbslam3
-LAUNCH_FILE=benchmark_euroc-orbslam3-stereo_imu.launch
+# LAUNCH_FILE=benchmark_euroc-orbslam3-stereo_imu.launch
 # prep_result_folders $RESULTS_DIR
 
 # run_orbslam3 \

@@ -5,8 +5,7 @@ bench_ws
   <img src="https://github.com/chutsu/bench_ws/workflows/ci/badge.svg">
 </a>
 
-Just a benchmark catkin workspace to compare against different state estimation
-algorithms, namely:
+A catkin workspace to benchmark different state estimation algorithms, namely:
 
 - [VINS-Mono][VINS-Mono]
 - [VINS-Fusion][VINS-Fusion]
