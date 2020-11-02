@@ -19,3 +19,6 @@
 [submodule "src/ORB_SLAM3"]
 	path = src/ORB_SLAM3
 	url = https://github.com/chutsu/ORB_SLAM3
+[submodule "src/okvis"]
+	path = src/okvis
+	url = git@github.com:chutsu/okvis.git
