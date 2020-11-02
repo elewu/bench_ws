@@ -11,6 +11,7 @@ A catkin workspace to benchmark different state estimation algorithms, namely:
 - [VINS-Fusion][VINS-Fusion]
 - [ORBSLAM3][ORBSLAM3]
 - [Stereo-MSCKF][Stereo-MSCKF]
+- [OKVIS][OKVIS]
 
 
 Build
@@ -85,5 +86,6 @@ MIT
 [VINS-Fusion]:https://github.com/HKUST-Aerial-Robotics/VINS-Fusion
 [ORBSLAM3]: https://github.com/UZ-SLAMLab/ORB_SLAM3
 [Stereo-MSCKF]: https://github.com/KumarRobotics/msckf_vio
+[OKVIS]: https://github.com/ethz-asl/okvis
 
 [EuRoC]: https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets
