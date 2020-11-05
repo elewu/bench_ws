@@ -4,7 +4,7 @@
   <arg name="rosbag_input_path" default="/data/euroc_mav/MH_01_easy.bag" />
   <arg name="rosbag_outfile" default="estimation.bag" />
   <arg name="rosbag_output_path" default="$(arg catkin_ws)/$(arg rosbag_outfile)" />
-  <arg name="config_file" default="$(find bench)/configs/autocal/vins_fusion/euroc-stereo_imu.yaml" />
+  <arg name="config_file" default="$(find bench)/configs/vins_fusion/euroc-stereo_imu.yaml" />
 
   <!-- ROSBAG PLAY -->
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"

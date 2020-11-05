@@ -4,7 +4,7 @@
   <arg name="rosbag_input_path" default="/data/euroc_mav/V1_01_easy.bag" />
   <arg name="rosbag_outfile" default="estimation.bag" />
   <arg name="rosbag_output_path" default="$(arg catkin_ws)/$(arg rosbag_outfile)" />
-  <arg name="config_file" default="$(find bench)/configs/autocal/msckf_vio/euroc.yaml"/>
+  <arg name="config_file" default="$(find msckf_vio)/config/camchain-imucam-euroc.yaml"/>
 
   <!-- ROSBAG PLAY -->
   <node pkg="rosbag" type="play" name="player" output="screen" required="true"
@@ -14,10 +14,10 @@
   <node pkg="rosbag" type="record" name="recorder" output="screen" required="true"
     args="--topic /firefly_sbx/vio/odom -O $(arg rosbag_output_path)"/>
 
-  <!-- MSCKF VIO LAUNCH FILE -->
-  <include file="$(find msckf_vio)/launch/msckf_vio_euroc.launch">
-    <arg name="calibration_file" value="$(arg config_file)" />
-  </include>
+  <!-- <!&#45;&#45; MSCKF VIO LAUNCH FILE &#45;&#45;> -->
+  <!-- <include file="$(find msckf_vio)/launch/msckf_vio_euroc.launch"> -->
+  <!--   <arg name="calibration_file" value="$(arg config_file)" /> -->
+  <!-- </include> -->
 
   <!-- RVIZ -->
   <node name="rvizvisualisation" pkg="rviz" type="rviz" output="log" required="true"

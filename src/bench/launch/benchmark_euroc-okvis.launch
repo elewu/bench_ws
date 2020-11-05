@@ -1,0 +1,9 @@
+<launch>
+r <arg name="catkin_ws" default="$(dirname)/../../../" />
+  <arg name="input_path" default="/data/euroc_mav/V1_01_easy/" />
+  <arg name="output_path" default="$(arg catkin_ws)/okvis_estimate.txt" />
+  <arg name="config_file" default="$(find okvis)/config/config_fpga_p2_euroc.yaml"/>
+
+  <node pkg="okvis" type="okvis_app_synchronous" name="okvis" output="screen" required="true"
+    args="$(arg config_file) $(arg input_path)"/>
+</launch>

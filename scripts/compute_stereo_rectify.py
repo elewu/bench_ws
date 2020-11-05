@@ -1,81 +1,27 @@
 import cv2
 import numpy as np
+import yaml
 
-# EuRoC
-cam0_proj = np.array([[458.654, 0.0, 367.215],
-                      [0.0, 457.296, 248.375],
-                      [0.0, 0.0, 1.0]])
-cam1_proj = np.array([[457.587, 0.0, 379.999],
-                      [0.0, 456.134, 255.238],
-                      [0.0, 0.0, 1]])
-cam0_dist = np.array([-0.28340811, 0.07395907, 0.00019359, 1.76187114e-05, 0.0])
-cam1_dist = np.array([-0.28368365, 0.07451284, -0.00010473, -3.555907e-05, 0.0])
+calib_file = '/tmp/calib_results-batch_estimator.yaml'
 
-# # kalibr
-# cam0_proj = np.array([[459.01453118196645, 0.0,               366.3571490294547],
-#                       [0.0,                457.7061957452046, 248.62459895511316],
-#                       [0.0,                0.0,               1.0]])
-# cam1_proj = np.array([[457.88674471074074, 0.0,                379.2287469528679],
-#                       [0.0,                456.50788964495484, 255.6450362100199],
-#                       [0.0,                0.0,                1.0]])
-# cam0_dist = np.array([-0.287330481246602, 0.07759609647010943, 0.00030209025627091993, 4.7663398226923416e-05])
-# cam1_dist = np.array([-0.28661972619139564, 0.077277401891847, 1.8327578207530492e-05, 2.4897607411678205e-05])
+calib_yaml = open(calib_file, 'r')
+calib = yaml.safe_load(calib_yaml)
 
-# euroc
-# T_SC0 = np.array([[0.0148655429818, -0.999880929698, 0.00414029679422, -0.0216401454975],
-#                   [0.999557249008, 0.0149672133247, 0.025715529948,  -0.064676986768],
-#                   [-0.0257744366974, 0.00375618835797, 0.999660727178, 0.00981073058949],
-#                   [0, 0, 0, 1]])
-#
-# T_SC1 = np.array([[0.0125552670891, -0.999755099723, 0.0182237714554, -0.0198435579556],
-#                   [0.999598781151, 0.0130119051815, 0.0251588363115, 0.0453689425024],
-#                   [-0.0253898008918, 0.0179005838253, 0.999517347078, 0.00786212447038],
-#                   [0, 0, 0, 1]])
 
-# autocal
-# T_SC0 = np.array([
-#     [0.0150978375346138, -0.999878429084474, 0.00389645394452559, -0.0164955290793582],
-#     [0.999644228600544, 0.0151797666729295, 0.0219315049501352, -0.0675743864860987],
-#     [-0.0219879859787293, 0.00356394939902611, 0.999751882587515, 0.00565949229200543],
-#     [0, 0, 0, 1]
-# ])
-# T_SC1 = np.array([
-#     [0.0123912474294644, -0.999746579071713, 0.0187945370134486, -0.0152819047538224],
-#     [0.999705551322556, 0.0127785333405486, 0.0206281298359713, 0.0435913961168689],
-#     [-0.020863068854006, 0.0185333947260772, 0.999610546982134, 0.0104368174469041],
-#     [0, 0, 0, 1]
-# ])
+def form_K(intrinsics):
+    fx = intrinsics[0]
+    fy = intrinsics[1]
+    cx = intrinsics[2]
+    cy = intrinsics[3]
+    return np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]])
 
-T_SC0 = np.array([
-    [0.015088, -0.999879, 0.003891, -0.016820],
-    [0.999645, 0.015170, 0.021901, -0.067456],
-    [-0.021957, 0.003560, 0.999753, 0.005030],
-    [0.000000, 0.000000, 0.000000, 1.000000]
-])
+cam0_K = form_K(calib['cam0']['intrinsics'])
+cam0_dist = np.array(calib['cam0']['distortion'] + [0.0])
+cam1_K = form_K(calib['cam1']['intrinsics'])
+cam1_dist = np.array(calib['cam1']['distortion'] + [0.0])
 
-T_SC1 = np.array([
-    [0.012777, -0.999749, 0.018384, -0.015279],
-    [0.999692, 0.013163, 0.021053, 0.042774],
-    [-0.021290, 0.018109, 0.999609, 0.003157],
-    [0.000000, 0.000000, 0.000000, 1.000000]
-])
-
-# # kalibr
-# T_C0S = np.array([
-#     [0.01496650221625856, 0.9996699324639489, -0.02088132991299131, 0.06866596603701511],
-#     [-0.9998849881448637, 0.015014414167788204, 0.002139591022748003, -0.015907823174948457],
-#     [0.0024524057488988452, 0.02084690611871645, 0.9997796718334099, -0.0024599422338853166],
-#     [0.0, 0.0, 0.0, 1.0]
-# ])
-# T_C1S = np.array([
-#     [0.012790549888821834, 0.9997018519687048, -0.02079925488769658, -0.04136947106384646],
-#     [-0.9997879689982713, 0.01312181989143718, 0.015869306508114328, -0.015683960813687874],
-#     [0.016137499182133364, 0.020591867644254483, 0.9996577194755554, -0.0028035136386968217],
-#     [0.0, 0.0, 0.0, 1.0]
-# ])
-
-# T_SC0 = np.linalg.inv(T_C0S)
-# T_SC1 = np.linalg.inv(T_C1S)
+T_SC0 = np.reshape(np.array(calib['T_imu0_cam0']['data']), (4, 4))
+T_SC1 = np.reshape(np.array(calib['T_imu0_cam1']['data']), (4, 4))
 
 T_C0S = np.linalg.inv(T_SC0)
 T_C0C1 = np.dot(T_C0S, T_SC1)
@@ -85,80 +31,180 @@ image_size = (752, 480)
 R = T_C1C0[0:3, 0:3]
 t = T_C1C0[0:3, 3]
 
-retval = cv2.stereoRectify(cam0_proj, cam0_dist,
-                           cam1_proj, cam1_dist,
+retval = cv2.stereoRectify(cam0_K, cam0_dist,
+                           cam1_K, cam1_dist,
                            image_size, R, t,
                            alpha=0)
 
-def print_vec(v):
-    print("data: [" + ", ".join([str(x) for x in v]) + "]")
+R0 = retval[0]
+R1 = retval[1]
+P0 = retval[2]
+P1 = retval[3]
 
-def print_mat3(A):
-    a = A.flatten()
-    s = """\
-data: [{0}, {1}, {2},
-       {3}, {4}, {5},
-       {6}, {6}, {8}]
-""".format(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8])
-    print(s)
-
-def print_mat34(A):
-    a = A.flatten()
-    s = """\
-data: [{0}, {1}, {2}, {3},
-       {4}, {5}, {6}, {7},
-       {8}, {9}, {10}, {11}]
-""".format(a[0], a[1], a[2], a[3],
-	   a[4], a[5], a[6], a[7],
-	   a[8], a[9], a[10], a[11])
-    print(s)
-
-def print_mat4(A):
-    a = A.flatten()
-    s = """\
-data: [{0}, {1}, {2}, {3},
-       {4}, {5}, {6}, {7},
-       {8}, {9}, {10}, {11},
-       {12}, {13}, {14}, {15}]
-""".format(a[0], a[1], a[2], a[3],
-	   a[4], a[5], a[6], a[7],
-	   a[8], a[9], a[10], a[11],
-	   a[12], a[13], a[14], a[15])
-    print(s)
+P_fx = P0[0, 0]
+P_fy = P0[1, 1]
+P_cx = P0[0, 2]
+P_cy = P0[1, 2]
+baseline = -1 * P1[0, 3]
 
 
-print("cam0_K")
-print_mat3(cam0_proj)
-print("")
+ORBSLAM3_CALIB='''\
+%YAML:1.0
 
-print("cam0_D")
-print_vec(cam0_dist)
-print("")
+#--------------------------------------------------------------------------------------------
+# Camera Parameters. Adjust them!
+#--------------------------------------------------------------------------------------------
+Camera.type: "PinHole"
 
-print("cam1_K")
-print_mat3(cam1_proj)
-print("")
+# Camera calibration and distortion parameters (OpenCV) (equal for both cameras after stereo rectification)
+# euroc
+Camera.fx: {P_fx}
+Camera.fy: {P_fy}
+Camera.cx: {P_cx}
+Camera.cy: {P_cy}
 
-print("cam1_D")
-print_vec(cam1_dist)
-print("")
+Camera.k1: 0.0
+Camera.k2: 0.0
+Camera.p1: 0.0
+Camera.p2: 0.0
 
+Camera.width: 752
+Camera.height: 480
 
-print("T_SC0:")
-print_mat4(T_SC0)
-print("")
+# Camera frames per second
+Camera.fps: 20.0
 
-print("R0:")
-print_mat3(retval[0])
-print("")
+# stereo baseline times fx
+Camera.bf: {baseline}
 
-print("R1:")
-print_mat3(retval[1])
-print("")
+# Color order of the images (0: BGR, 1: RGB. It is ignored if images are grayscale)
+Camera.RGB: 1
 
-print("P0:")
-print_mat34(retval[2])
-print("")
+# Close/Far threshold. Baseline times.
+ThDepth: 35.0 # 35
 
-print("P1:")
-print_mat34(retval[3])
+# Transformation from camera 0 to body-frame (imu)
+Tbc: !!opencv-matrix
+   rows: 4
+   cols: 4
+   dt: f
+   data: {T_SC0}
+
+# IMU noise
+IMU.NoiseGyro: 1.7e-04 # 1.6968e-04
+IMU.NoiseAcc: 2.0e-03 # 2.0000e-3
+IMU.GyroWalk: 1.9393e-05
+IMU.AccWalk: 3.e-03 # 3.0000e-3
+IMU.Frequency: 200
+
+#--------------------------------------------------------------------------------------------
+# Stereo Rectification. Only if you need to pre-rectify the images.
+# Camera.fx, .fy, etc must be the same as in LEFT.P
+#--------------------------------------------------------------------------------------------
+
+LEFT.height: 480
+LEFT.width: 752
+LEFT.D: !!opencv-matrix
+   rows: 1
+   cols: 5
+   dt: d
+   data: {cam0_dist}
+
+LEFT.K: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: {cam0_K}
+
+LEFT.R:  !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: {R0}
+
+LEFT.Rf:  !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: f
+   data: {R0}
+
+LEFT.P:  !!opencv-matrix
+   rows: 3
+   cols: 4
+   dt: d
+   data: {P0}
+
+RIGHT.height: 480
+RIGHT.width: 752
+RIGHT.D: !!opencv-matrix
+   rows: 1
+   cols: 5
+   dt: d
+   data: {cam1_dist}
+
+RIGHT.K: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: {cam1_K}
+
+RIGHT.R:  !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: {R1}
+
+RIGHT.P:  !!opencv-matrix
+   rows: 3
+   cols: 4
+   dt: d
+   data: {P1}
+
+#--------------------------------------------------------------------------------------------
+# ORB Parameters
+#--------------------------------------------------------------------------------------------
+
+# ORB Extractor: Number of features per image
+ORBextractor.nFeatures: 1200
+
+# ORB Extractor: Scale factor between levels in the scale pyramid
+ORBextractor.scaleFactor: 1.2
+
+# ORB Extractor: Number of levels in the scale pyramid
+ORBextractor.nLevels: 8
+
+# ORB Extractor: Fast threshold
+# Image is divided in a grid. At each cell FAST are extracted imposing a minimum response.
+# Firstly we impose iniThFAST. If no corners are detected we impose a lower value minThFAST
+# You can lower these values if your images have low contrast
+ORBextractor.iniThFAST: 20
+ORBextractor.minThFAST: 7
+
+#--------------------------------------------------------------------------------------------
+# Viewer Parameters
+#--------------------------------------------------------------------------------------------
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3
+Viewer.ViewpointX: 0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500
+'''.format(
+    P_fx=P_fx,
+    P_fy=P_fy,
+    P_cx=P_cx,
+    P_cy=P_cy,
+    T_SC0=T_SC0.flatten().tolist(),
+    cam0_K=cam0_K.flatten().tolist(),
+    cam1_K=cam1_K.flatten().tolist(),
+    cam0_dist=cam0_dist.flatten().tolist(),
+    cam1_dist=cam1_dist.flatten().tolist(),
+    R0=R0.flatten().tolist(), R1=R1.flatten().tolist(),
+    P0=P0.flatten().tolist(), P1=P1.flatten().tolist(),
+    baseline=baseline
+)
+print(ORBSLAM3_CALIB)
