@@ -4,31 +4,38 @@ set -e
 # make
 source devel/setup.bash
 
-# roslaunch bench benchmark_euroc-okvis.launch
+# python scripts/compute_stereo_rectify.py > src/bench/configs/kalibr/euroc-stereo_imu.yaml
 
-# python scripts/compute_stereo_rectify.py > src/bench/configs/autocal/orbslam3/euroc-stereo_imu.yaml
-# ./scripts/bench_euroc-orbslam3.bash
+# ./scripts/benchmark_euroc-vins_fusion.bash
+# ./scripts/benchmark_euroc-orbslam3.bash
 
-# RESULTS_DIR=/data/results/euroc/orbslam3-autocal
-# for DIR in $(ls $RESULTS_DIR); do
-# python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
-#   /data/euroc_mav/$DIR/mav0/state_groundtruth_estimate0/data.csv \
-#   $RESULTS_DIR/$DIR/orbslam3_estimate.txt \
-#   --verbose >> autocal_results.txt
-# done
+# rosrun \
+#   rpg_trajectory_evaluation \
+#   analyze_trajectories.py \
+#   /data/results/euroc/euroc_analysis.yaml \
+#   --output_dir=/data/results/euroc/analysis \
+#   --results_dir=/data/results/euroc \
+#   --platform laptop \
+#   --odometry_error_per_dataset \
+#   --plot_trajectories \
+#   --rmse_table \
+#   --rmse_boxplot
 
-./scripts/bench_euroc-vins_fusion.bash
+# rosrun \
+#   rpg_trajectory_evaluation \
+#   analyze_trajectory_single.py \
+#   /tmp/laptop_orbslam3-autocal_MH_01
 
-# RESULTS_DIR=/data/results/euroc/orbslam3
-# for DIR in $(ls $RESULTS_DIR); do
-# python src/ORB_SLAM3/evaluation/evaluate_ate_scale.py \
-#   /data/euroc_mav/$DIR/mav0/state_groundtruth_estimate0/data.csv \
-#   $RESULTS_DIR/$DIR/orbslam3_estimate.txt \
-#   --verbose >> euroc_results.txt
-# done
-
-# # Compare two different runs
-# compare_runs \
-#   results/euroc/msckf_vio/V1_01/report.pdf \
-#   results/euroc/vins_fusion/V1_01/report.pdf \
-#   report.pdf
+# pdfunite \
+#   /data/results/euroc/analysis/laptop_MH_01_results/MH_01_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_MH_02_results/MH_02_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_MH_03_results/MH_03_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_MH_04_results/MH_04_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_MH_05_results/MH_05_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_V1_01_results/V1_01_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_V1_02_results/V1_02_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_V1_03_results/V1_03_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_V2_01_results/V2_01_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_V2_02_results/V2_02_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/laptop_V2_03_results/V2_03_trans_rot_error.pdf \
+#   /data/results/euroc/analysis/report.pdf

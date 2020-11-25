@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import yaml
 
-calib_file = '/tmp/calib_results-batch_estimator.yaml'
+calib_file = '/home/chutsu/kalibr_ws/euroc_calib/camchain.yaml'
 
 calib_yaml = open(calib_file, 'r')
 calib = yaml.safe_load(calib_yaml)
@@ -15,13 +15,21 @@ def form_K(intrinsics):
     cy = intrinsics[3]
     return np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]])
 
-cam0_K = form_K(calib['cam0']['intrinsics'])
-cam0_dist = np.array(calib['cam0']['distortion'] + [0.0])
-cam1_K = form_K(calib['cam1']['intrinsics'])
-cam1_dist = np.array(calib['cam1']['distortion'] + [0.0])
+# cam0_K = form_K(calib['cam0']['intrinsics'])
+# cam0_dist = np.array(calib['cam0']['distortion'] + [0.0])
+# cam1_K = form_K(calib['cam1']['intrinsics'])
+# cam1_dist = np.array(calib['cam1']['distortion'] + [0.0])
+# T_SC0 = np.reshape(np.array(calib['T_imu0_cam0']['data']), (4, 4))
+# T_SC1 = np.reshape(np.array(calib['T_imu0_cam1']['data']), (4, 4))
 
-T_SC0 = np.reshape(np.array(calib['T_imu0_cam0']['data']), (4, 4))
-T_SC1 = np.reshape(np.array(calib['T_imu0_cam1']['data']), (4, 4))
+cam0_K = form_K(calib['cam0']['intrinsics'])
+cam0_dist = np.array(calib['cam0']['distortion_coeffs'] + [0.0])
+cam1_K = form_K(calib['cam1']['intrinsics'])
+cam1_dist = np.array(calib['cam1']['distortion_coeffs'] + [0.0])
+T_C0S = np.reshape(np.array(calib['cam0']['T_cam_imu']), (4, 4))
+T_C1S = np.reshape(np.array(calib['cam1']['T_cam_imu']), (4, 4))
+T_SC0 = np.linalg.inv(T_C0S)
+T_SC1 = np.linalg.inv(T_C1S)
 
 T_C0S = np.linalg.inv(T_SC0)
 T_C0C1 = np.dot(T_C0S, T_SC1)

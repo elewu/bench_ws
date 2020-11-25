@@ -5,41 +5,37 @@ SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 prep_result_folders() {
   # Prepare results folders
   RESULTS_DIR=$1;
-  mkdir -p $RESULTS_DIR;
-  mkdir -p $RESULTS_DIR/MH_01;
-  mkdir -p $RESULTS_DIR/MH_02;
-  mkdir -p $RESULTS_DIR/MH_03;
-  mkdir -p $RESULTS_DIR/MH_04;
-  mkdir -p $RESULTS_DIR/MH_05;
-  mkdir -p $RESULTS_DIR/V1_01;
-  mkdir -p $RESULTS_DIR/V1_02;
-  mkdir -p $RESULTS_DIR/V1_03;
-  mkdir -p $RESULTS_DIR/V2_01;
-  mkdir -p $RESULTS_DIR/V2_02;
-  mkdir -p $RESULTS_DIR/V2_03;
+  PLATFORM=$2;
+  ALGO=$3;
+  DATASETS=(MH_01 MH_02 MH_03 MH_04 MH_05
+            V1_01 V1_02 V1_03
+            V2_01 V2_02 V2_03);
 
-  # # Unpack groundtruth data
-  # GND_PATH=$RESULTS_DIR/ground_truth
-  # mkdir -p $GND_PATH
-  # tar -xzvf $SCRIPT_PATH/../data/euroc.tar.bz2 -C $GND_PATH
+  # Unpack groundtruth data
+  DATA_PATH=$SCRIPT_PATH/../data
+  tar -xf $DATA_PATH/euroc.tar.bz2 -C $DATA_PATH
 
-  # Prepare eval_cfg.yaml and groudtruth files
-  for DIR in $(dir $RESULTS_DIR); do
-    cd $RESULTS_DIR/$DIR;
-    ln -fs ../../eval_cfg.yaml .;
-    ln -fs `find ../../ -name "${DIR}_groundtruth.txt"` stamped_groundtruth.txt;
+  for DS in ${DATASETS[@]}; do
+    RESULTS_PATH=$RESULTS_DIR/${PLATFORM}/${ALGO}/${PLATFORM}_${ALGO}_${DS};
+    mkdir -p $RESULTS_PATH;
+
+    cd $RESULTS_PATH;
+    ln -fs $DATA_PATH/eval_cfg.yaml .;
+    ln -fs $DATA_PATH/${DS}_groundtruth.txt stamped_groundtruth.txt;
     cd ~-;
   done
 }
 
 run_vio() {
   LAUNCH_FILE=$1;
-  ROSBAG_INPUT=$2;
-  ROSBAG_OUTPUT=$3;
-  EST_TOPIC=$4;
+  CONFIG_FILE=$2;
+  ROSBAG_INPUT=$3;
+  ROSBAG_OUTPUT=$4;
+  EST_TOPIC=$5;
 
   # Run VIO
   roslaunch bench $LAUNCH_FILE \
+    config_file:=$CONFIG_FILE \
     rosbag_input_path:=$ROSBAG_INPUT \
     rosbag_output_path:=$ROSBAG_OUTPUT
 
@@ -71,14 +67,15 @@ run_vio() {
 
 batch_run_vio() {
   LAUNCH_FILE=$1;
-  ROSBAGS_DIR=$2;
-  RESULTS_DIR=$3;
-  EST_TOPIC=$4;
+  CONFIG_FILE=$2;
+  ROSBAGS_DIR=$3;
+  RESULTS_DIR=$4;
+  EST_TOPIC=$5;
 
   for ROSBAG in $(ls $ROSBAGS_DIR); do
     ROSBAG_INPUT="$ROSBAGS_DIR/$ROSBAG";
     ROSBAG_OUTPUT="$RESULTS_DIR/${ROSBAG/.bag/}/estimation.bag";
-    run_vio $LAUNCH_FILE $ROSBAG_INPUT $ROSBAG_OUTPUT $EST_TOPIC
+    run_vio $LAUNCH_FILE $CONFIG_FILE $ROSBAG_INPUT $ROSBAG_OUTPUT $EST_TOPIC
   done
 }
 
