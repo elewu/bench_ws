@@ -9,10 +9,10 @@ trap 'kill -9 %1' 2
 # ORBSLAM3
 RESULTS_DIR=/data/results/euroc/
 PLATFORM=laptop
-ALGO=orbslam3-autocal
-CONFIG_FILE=$SCRIPT_PATH/../src/bench/configs/autocal/orbslam3/euroc-stereo_imu.yaml
+ALGO=orbslam3-stereo-vo-autocal
+CONFIG_FILE=$SCRIPT_PATH/../src/bench/configs/autocal/orbslam3/euroc-stereo.yaml
 ROSBAGS_DIR=/data/euroc_mav/rosbags
-LAUNCH_FILE=benchmark_euroc-orbslam3-stereo_imu.launch
+LAUNCH_FILE=benchmark_euroc-orbslam3-stereo.launch
 
 run_orbslam3() {
   LAUNCH_FILE=$1;
@@ -65,15 +65,6 @@ batch_run_orbslam3() {
     RESULTS_PATH=$RESULTS_DIR/${PLATFORM}/${ALGO}/${PLATFORM}_${ALGO}_${DS};
     SAVE_PATH="${RESULTS_PATH}/orbslam3_estimate.txt";
     run_orbslam3 $LAUNCH_FILE $CONFIG_FILE $ROSBAG_INPUT $SAVE_PATH
-  done
-}
-
-batch_analyze_orbslam3_results() {
-  RESULTS_DIR=$1;
-
-  for DIR in $(dir $RESULTS_DIR); do
-    RESULTS_PATH=$RESULTS_DIR/$DIR;
-    analyze_orbslam3_results $RESULTS_PATH;
   done
 }
 

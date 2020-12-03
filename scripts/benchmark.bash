@@ -90,3 +90,35 @@ compare_runs() {
   rm -f tmp-*-*.pdf
 }
 
+analyze_euroc_runs() {
+  RESULTS_DIR=$1;
+  ANALYSIS_DIR=$2;
+  ANALYSIS_YAML=$3;
+
+  rosrun \
+    rpg_trajectory_evaluation \
+    analyze_trajectories.py \
+    $ANALYSIS_YAML \
+    --output_dir=$ANALYSIS_DIR \
+    --results_dir=$RESULTS_DIR \
+    --platform laptop \
+    --odometry_error_per_dataset \
+    --plot_trajectories \
+    --rmse_table \
+    --rmse_boxplot
+
+  pdfunite \
+    $ANALYSIS_DIR/laptop_MH_01_results/MH_01_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_MH_02_results/MH_02_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_MH_03_results/MH_03_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_MH_04_results/MH_04_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_MH_05_results/MH_05_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_V1_01_results/V1_01_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_V1_02_results/V1_02_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_V1_03_results/V1_03_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_V2_01_results/V2_01_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_V2_02_results/V2_02_trans_rot_error.pdf \
+    $ANALYSIS_DIR/laptop_V2_03_results/V2_03_trans_rot_error.pdf \
+    $ANALYSIS_DIR/report.pdf
+}
+

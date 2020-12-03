@@ -214,7 +214,7 @@ int main(int argc, char **argv) {
   ORB_SLAM3::System SLAM(vocab_file, config_file, ORB_SLAM3::System::IMU_STEREO, show_gui);
 
   ImuGrabber imugb;
-  ImageGrabber igb(&SLAM,&imugb, rectify, equalize);
+  ImageGrabber igb(&SLAM, &imugb, rectify, equalize);
   if (igb.do_rectify) {
     // Load settings related to stereo calibration
     cv::FileStorage fsSettings(config_file, cv::FileStorage::READ);
@@ -262,7 +262,7 @@ int main(int argc, char **argv) {
   ros::Subscriber sub_imu = n.subscribe("/imu", 1000, &ImuGrabber::GrabImu, &imugb);
   ros::Subscriber sub_img_left = n.subscribe("/camera/left/image_raw", 100, &ImageGrabber::GrabImageLeft,&igb);
   ros::Subscriber sub_img_right = n.subscribe("/camera/right/image_raw", 100, &ImageGrabber::GrabImageRight,&igb);
-  std::thread sync_thread(&ImageGrabber::SyncWithImu,&igb);
+  std::thread sync_thread(&ImageGrabber::SyncWithImu, &igb);
   ros::spin();
 
   // Save estimation
