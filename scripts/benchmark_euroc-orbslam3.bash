@@ -1,73 +1,36 @@
 #!/bin/bash
 set -e
 SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-source $SCRIPT_PATH/benchmark.bash
-source $SCRIPT_PATH/../devel/setup.bash
-trap 'kill -9 %1' 2
+DATASETS=(MH_01 MH_02 MH_03 MH_04 MH_05 V1_01 V1_02 V1_03 V2_01 V2_02 V2_03)
 
+# AUTOCAL
+CALIB_FILE=$SCRIPT_PATH/../configs/autocal/orbslam3/euroc-stereo.yaml
+RES_DIR=/data/results/euroc/orbslam3-autocal
+# KALIBR
+# CALIB_FILE=$PWD/src/bench/configs/kalibr/euroc-stereo.yaml
+# RES_DIR=/data/results/euroc/orbslam3-kalibr
+# EUROC
+# CALIB_FILE=$PWD/src/bench/configs/orbslam3/euroc-stereo.yaml
+# RES_DIR=/data/results/euroc/orbslam3-euroc
 
-# ORBSLAM3
-RESULTS_DIR=/data/results/euroc/
-PLATFORM=laptop
-ALGO=orbslam3-stereo-vo-autocal
-CONFIG_FILE=$SCRIPT_PATH/../src/bench/configs/autocal/orbslam3/euroc-stereo.yaml
-ROSBAGS_DIR=/data/euroc_mav/rosbags
-LAUNCH_FILE=benchmark_euroc-orbslam3-stereo.launch
+ORBSLAM3_DIR=src/ORB_SLAM3
+EUROC_DIR=/data/euroc_mav/
 
-run_orbslam3() {
-  LAUNCH_FILE=$1;
-  CONFIG_FILE=$2;
-  ROSBAG_INPUT=$3;
-  RESULTS_FILE=$4;
-  RESULTS_PATH=$(dirname $RESULTS_FILE);
+RUNS=(run1 run2 run3 run4 run5 run6 run7 run8 run9 run10)
 
-  # Run ORB_SLAM3
-  roslaunch bench $LAUNCH_FILE \
-    config_file:=$CONFIG_FILE \
-    rosbag_input_path:=$ROSBAG_INPUT \
-    save_path:=$RESULTS_FILE
+for RUN in ${RUNS[@]}; do
+  echo $RUN
 
-  # Convert data from orbslam3 format to rpg_trajectory_evaluation format
-  python $SCRIPT_PATH/orbslam3_prep_data.py \
-    $RESULTS_PATH/orbslam3_estimate.txt \
-    $RESULTS_PATH/stamped_groundtruth.txt \
-    $RESULTS_PATH/stamped_traj_estimate.txt
-
-  # # Evaluate results
-  # rosrun rpg_trajectory_evaluation \
-  #   analyze_trajectory_single.py \
-  #   $RESULTS_PATH
-  #
-  # # Combine plots into a single pdf
-  # pdfunite \
-  #   $RESULTS_PATH/plots/traj_est/rel_translation_error.pdf \
-  #   $RESULTS_PATH/plots/traj_est/rel_translation_error_perc.pdf \
-  #   $RESULTS_PATH/plots/traj_est/rel_yaw_error.pdf \
-  #   $RESULTS_PATH/plots/traj_est/rotation_error_posyaw_-1.pdf \
-  #   $RESULTS_PATH/plots/traj_est/scale_error_posyaw_-1.pdf \
-  #   $RESULTS_PATH/plots/traj_est/trajectory_side_posyaw_-1.pdf \
-  #   $RESULTS_PATH/plots/traj_est/trajectory_top_posyaw_-1.pdf \
-  #   $RESULTS_PATH/plots/traj_est/translation_error_posyaw_-1.pdf \
-  #   $RESULTS_PATH/report.pdf
-}
-
-batch_run_orbslam3() {
-  LAUNCH_FILE=$1;
-  CONFIG_FILE=$2;
-  ROSBAGS_DIR=$3;
-
-  RESULTS_DIR=$4;
-  PLATFORM=$5;
-
-  for ROSBAG in $(ls $ROSBAGS_DIR); do
-    ROSBAG_INPUT="$ROSBAGS_DIR/$ROSBAG";
-    DS=${ROSBAG/.bag/};
-    RESULTS_PATH=$RESULTS_DIR/${PLATFORM}/${ALGO}/${PLATFORM}_${ALGO}_${DS};
-    SAVE_PATH="${RESULTS_PATH}/orbslam3_estimate.txt";
-    run_orbslam3 $LAUNCH_FILE $CONFIG_FILE $ROSBAG_INPUT $SAVE_PATH
+  for DS in ${DATASETS[@]}; do
+    ./${ORBSLAM3_DIR}/Examples/Stereo/stereo_euroc \
+      ${ORBSLAM3_DIR}/Vocabulary/ORBvoc.txt \
+      ${CALIB_FILE} \
+      "$EUROC_DIR"/${DS} \
+      ${ORBSLAM3_DIR}/Examples/Stereo/EuRoC_TimeStamps/${DS/_/}.txt \
+      dataset-${DS/_/}_stereo
   done
-}
 
-# Run algorithms on EuRoC dataset
-prep_result_folders $RESULTS_DIR $PLATFORM $ALGO
-batch_run_orbslam3 $LAUNCH_FILE $CONFIG_FILE $ROSBAGS_DIR $RESULTS_DIR $PLATFORM
+  mkdir -p $RES_DIR/$RUN
+  mv f_dataset-*_stereo.txt $RES_DIR/$RUN
+  mv kf_dataset-*_stereo.txt $RES_DIR/$RUN
+done
