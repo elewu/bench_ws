@@ -1,22 +1,23 @@
 #!/bin/bash
 set -e
 SCRIPT_PATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+EUROC_DIR=/data/euroc_mav/
 DATASETS=(MH_01 MH_02 MH_03 MH_04 MH_05 V1_01 V1_02 V1_03 V2_01 V2_02 V2_03)
+RUNS=(run1 run2 run3 run4 run5 run6 run7 run8 run9 run10)
 
 # AUTOCAL
 CALIB_FILE=$SCRIPT_PATH/../configs/autocal/orbslam3/euroc-stereo.yaml
 RES_DIR=/data/results/euroc/orbslam3-autocal
+
 # KALIBR
-# CALIB_FILE=$PWD/src/bench/configs/kalibr/euroc-stereo.yaml
+# CALIB_FILE=$SCRIPT_PATH/../configs/kalibr/euroc-stereo.yaml
 # RES_DIR=/data/results/euroc/orbslam3-kalibr
+
 # EUROC
-# CALIB_FILE=$PWD/src/bench/configs/orbslam3/euroc-stereo.yaml
+# CALIB_FILE=$SCRIPT_PATH/../configs/orbslam3/euroc-stereo.yaml
 # RES_DIR=/data/results/euroc/orbslam3-euroc
 
 ORBSLAM3_DIR=src/ORB_SLAM3
-EUROC_DIR=/data/euroc_mav/
-
-RUNS=(run1 run2 run3 run4 run5 run6 run7 run8 run9 run10)
 
 for RUN in ${RUNS[@]}; do
   echo $RUN
