@@ -7,8 +7,8 @@ trap 'kill -9 %1' 2
 
 # VINS-Fusion
 LAUNCH_FILE=benchmark_euroc-vins_fusion.launch
-CONFIG_FILE=$SCRIPT_PATH/../src/bench/configs/autocal/vins_fusion/euroc-stereo_imu.yaml
-RESULTS_DIR=/data/results/euroc/vins_fusion_stereo-autocal-td
+CONFIG_FILE=$SCRIPT_PATH/../configs/autocal/vins_fusion/euroc-stereo_imu.yaml
+RESULTS_DIR=/data/results/euroc/vins_fusion_stereo-autocal
 ROSBAGS_DIR=/data/euroc_mav/rosbags
 EST_TOPIC=/vins_fusion/odometry
 

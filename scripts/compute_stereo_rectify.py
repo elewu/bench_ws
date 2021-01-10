@@ -41,8 +41,8 @@ if calib_format == "autocal":
     cam1_dist = np.array(calib['cam1']['dist_params'] + [0.0])
 
     if mode == "VIO":
-        T_SC0 = np.reshape(np.array(calib['T_imu0_cam0']['data']), (4, 4))
-        T_SC1 = np.reshape(np.array(calib['T_imu0_cam1']['data']), (4, 4))
+        T_SC0 = np.reshape(np.array(calib['T_SC0']['data']), (4, 4))
+        T_SC1 = np.reshape(np.array(calib['T_SC1']['data']), (4, 4))
         T_C0S = np.linalg.inv(T_SC0)
         T_C0C1 = np.dot(T_C0S, T_SC1)
         T_C1C0 = np.linalg.inv(T_C0C1)
